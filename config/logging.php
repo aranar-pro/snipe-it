@@ -2,7 +2,6 @@
 
 use Monolog\Handler\StreamHandler;
 
-
 $config = [
 
     /*
@@ -44,6 +43,7 @@ $config = [
             'path' => storage_path('logs/laravel.log'),
             'level' => env('APP_LOG_LEVEL', 'error'),
         ],
+
 
         'daily' => [
             'driver' => 'daily',
