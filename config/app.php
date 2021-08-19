@@ -354,6 +354,10 @@ return [
         App\Providers\LdapServiceProvider::class,
         App\Providers\SamlServiceProvider::class,
 
+        /*
+        * Notification Channels
+        */
+        NotificationChannels\MicrosoftTeams\MicrosoftTeamsServiceProvider::class,
 
     ],
 

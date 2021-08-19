@@ -149,6 +149,7 @@
     'model_no'				=> 'Model No.',
     'months'				=> 'months',
     'moreinfo'				=> 'More Info',
+    'msteams_test_msg'        => 'Oh hai! Looks like your Microsoft Teams Webhook with Snipe-IT is working!',
     'name'					=> 'Name',
     'next'					=> 'Next',
     'next_audit_date'		=> 'Next Audit Date',

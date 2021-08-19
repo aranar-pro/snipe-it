@@ -9,6 +9,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\MicrosoftTeams\MicrosoftTeamsChannel;
+use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
 
 class CheckoutAssetNotification extends Notification
 {
@@ -48,18 +50,26 @@ class CheckoutAssetNotification extends Notification
 
     /**
      * Get the notification's delivery channels.
+     * TODO: add $notifyBy [2] = MicrosoftTeamsChannel::class;
+     * 
      *
      * @return array
      */
     public function via()
     {
-
+    
         $notifyBy = [];
 
         if (Setting::getSettings()->slack_endpoint!='') {
             \Log::debug('use slack');
             $notifyBy[] = 'slack';
         }
+
+        if (Setting::getSettings()->msteams_endpoint != '') {
+            \Log::debug('use msteams');
+            $notifyBy[2] = MicrosoftTeamsChannel::class;
+        }
+
 
         /**
          * Only send notifications to users that have email addresses
@@ -120,6 +130,32 @@ class CheckoutAssetNotification extends Notification
                     ->content($note);
             });
     }
+
+
+public function toMicrosoftTeams($notifiable)
+{
+        $expectedCheckin = 'None';
+        $target = $this->target;
+        $admin = $this->admin;
+        $item = $this->item;
+        $note = $this->note;
+
+        if (($this->expected_checkin) && ($this->expected_checkin != '')) {
+            $expectedCheckin = $this->expected_checkin;
+        }
+
+    return MicrosoftTeamsMessage::create()
+        ->to(Setting::getSettings()->msteams_endpoint)
+        ->type('success')
+        ->addStartGroupToSection($sectionId = 'action_msteams')
+        ->title('&#x2B06;&#x1F4BB; Asset Checked Out: <a href=' . $item->present()->viewUrl() . '>' . $item->present()->fullName() . '</a>', $params = ['section' => 'action_msteams'])
+        ->content($note, $params = ['section' => 'action_msteams'])
+        ->fact('To','<a href='.$target->present()->viewUrl().'>'.$target->present()->fullName().'</a>', $sectionId = 'action_msteams')
+        ->fact('By', '<a href='.$admin->present()->viewUrl().'>'.$admin->present()->fullName().'</a>', $sectionId = 'action_msteams')
+        ->fact('Expected Checkin', $expectedCheckin, $sectionId = 'action_msteams')
+        ->button('View in Browser', ''.$target->present()->viewUrl().'', $params = ['section' => 'action_msteams']);
+}
+
     /**
      * Get the mail representation of the notification.
      *
