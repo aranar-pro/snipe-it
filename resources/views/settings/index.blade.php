@@ -289,7 +289,7 @@
             <div class="box-body text-center">
               <h5>
                 <a href="{{ route('settings.slack.index') }}">
-                  <i class="fa fa-slack fa-4x" aria-hidden="true"></i>
+                  <i class="fa fa-windows fa-4x" aria-hidden="true"></i>
                   <br><br>
                   <span class="name">MS Teams</span>
                 </a>
