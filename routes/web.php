@@ -150,6 +150,9 @@ Route::group([ 'prefix' => 'admin','middleware' => ['auth', 'authorize:superuser
     Route::get('slack', ['as' => 'settings.slack.index','uses' => 'SettingsController@getSlack' ]);
     Route::post('slack', ['as' => 'settings.slack.save','uses' => 'SettingsController@postSlack' ]);
 
+    Route::get('msteams', ['as' => 'settings.msteams.index', 'uses' => 'SettingsController@getMSTeams']);
+    Route::post('msteams', ['as' => 'settings.msteams.save', 'uses' => 'SettingsController@postMSTeams']);
+
     Route::get('asset_tags', ['as' => 'settings.asset_tags.index','uses' => 'SettingsController@getAssetTags' ]);
     Route::post('asset_tags', ['as' => 'settings.asset_tags.save','uses' => 'SettingsController@postAssetTags' ]);
 
