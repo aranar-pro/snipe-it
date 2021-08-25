@@ -68,7 +68,8 @@
                         </div>
 
 
-                        <div class="form-group" id="msteamstestcontainer" style="display: none">
+                       <div class="form-group" id="msteamstestcontainer" style="display: none">
+                           
                             <div class="col-md-2">
                                 {{ Form::label('test_msteams', 'Test MS Teams') }}
                             </div>
@@ -105,6 +106,7 @@
 @push('js')
     <script nonce="{{ csrf_token() }}">
         var fieldcheck = function (event) {
+            
             if($('#msteams_endpoint').val() != "") {
                 //enable test button *only* if field is filled in
                 $('#msteamstestcontainer').fadeIn(500);
@@ -119,27 +121,26 @@
                     $('#save_msteams').removeAttr('disabled');
                 }
             }
+            
         };
 
         fieldcheck(); //run our field-checker once on page-load to set the initial state correctly.
 
         $('input:text').keyup(fieldcheck); // if *any* text field changes, we recalculate button states
 
-
-        $("#msteamstest").click(function() {
+         $("#msteamstest").click(function() {
 
             $("#msteamstestrow").removeClass('text-success');
             $("#msteamstestrow").removeClass('text-danger');
             $("#msteamsteststatus").removeClass('text-danger');
             $("#msteamsteststatus").html('');
-            $("#msteamstesticon").html('<i class="fa fa-spinner spin"></i> Sending Microsoft Teams Webhook test message...');
+            $("#msteamstesticon").html('<i class="fa fa-spinner spin"></i> Sending Microsoft Teams test message...');
             $.ajax({
                 url: '{{ route('api.settings.msteamstest') }}',
                 type: 'POST',
                 headers: {
-                    //"X-Requested-With": 'XMLHttpRequest',
+                    "X-Requested-With": 'XMLHttpRequest',
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-                    "Content-Type: application/json"
                 },
                 data: {
                     'msteams_endpoint': $('#msteams_endpoint').val()
@@ -200,7 +201,7 @@
             });
             return false;
         });
-
+        
     </script>
 
 @endpush
