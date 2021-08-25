@@ -54,7 +54,7 @@ class Setting extends Model
           'admin_cc_email'                      => 'email|nullable',
           'default_currency'                    => 'required',
           'locale'                              => 'required',
-          'msteams_endpoint'                      => 'url|nullable',
+          'msteams_endpoint'                    => 'url|nullable',
           'slack_endpoint'                      => 'url|required_with:slack_channel|nullable',
           'labels_per_page'                     => 'numeric',
           'slack_channel'                       => 'regex:/^[\#\@]?\w+/|required_with:slack_endpoint|nullable',
