@@ -708,6 +708,11 @@ Route::group(['prefix' => 'v1','namespace' => 'Api', 'middleware' => 'auth:api']
         'uses' => 'SettingsController@slacktest'
     ]);
 
+    Route::post('settings/msteamstest', [
+        'as' => 'api.settings.msteamstest',
+        'uses' => 'SettingsController@msteamstest'
+    ]);
+
     Route::post(
         'settings/mailtest',
         [

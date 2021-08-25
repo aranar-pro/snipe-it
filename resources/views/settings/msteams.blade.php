@@ -134,27 +134,26 @@
             $("#msteamsteststatus").html('');
             $("#msteamstesticon").html('<i class="fa fa-spinner spin"></i> Sending Microsoft Teams Webhook test message...');
             $.ajax({
-                url: '{{ route('api.settings.slacktest') }}',
+                url: '{{ route('api.settings.msteamstest') }}',
                 type: 'POST',
                 headers: {
-                    "X-Requested-With": 'XMLHttpRequest',
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                    //"X-Requested-With": 'XMLHttpRequest',
+                    //"X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                    "Content-Type: application/json"
                 },
                 data: {
-                    'slack_endpoint': $('#slack_endpoint').val(),
-                    'slack_channel': $('#slack_channel').val(),
-                    'slack_botname': $('#slack_botname').val(),
+                    'msteams_endpoint': $('#msteams_endpoint').val()
 
                 },
 
                 dataType: 'json',
 
                 success: function (data) {
-                    $('#save_slack').removeAttr('disabled');
-                    $("#slacktesticon").html('');
-                    $("#slacktestrow").addClass('text-success');
-                    $("#slackteststatus").addClass('text-success');
-                    $("#slackteststatus").html('<i class="fa fa-check text-success"></i> Success! Check the ' + $('#slack_channel').val() + ' channel for your test message, and be sure to click SAVE below to store your settings.');
+                    $('#save_msteams').removeAttr('disabled');
+                    $("#msteamstesticon").html('');
+                    $("#msteamstestrow").addClass('text-success');
+                    $("#msteamsteststatus").addClass('text-success');
+                    $("#msteamsteststatus").html('<i class="fa fa-check text-success"></i> Success! Check the channel for your test message, and be sure to click SAVE below to store your settings.');
                 },
 
                 error: function (data) {
@@ -168,13 +167,13 @@
 
                     var error_text = '';
 
-                    $('#save_slack').attr("disabled", true);
-                    $("#slacktesticon").html('');
-                    $("#slackteststatus").addClass('text-danger');
-                    $("#slacktesticon").html('<i class="fa fa-exclamation-triangle text-danger"></i>');
+                    $('#save_msteams').attr("disabled", true);
+                    $("#msteamstesticon").html('');
+                    $("#msteamsteststatus").addClass('text-danger');
+                    $("#msteamstesticon").html('<i class="fa fa-exclamation-triangle text-danger"></i>');
 
                     if (data.status == 500) {
-                        $('#slackteststatus').html('500 Server Error');
+                        $('#msteamsteststatus').html('500 Server Error');
                     } else if (data.status == 400) {
 
                         if (typeof errors != 'string') {
@@ -190,10 +189,10 @@
                             error_text = errors;
                         }
 
-                        $('#slackteststatus').html(error_text);
+                        $('#msteamsteststatus').html(error_text);
 
                     } else {
-                        $('#slackteststatus').html(data.responseText.message);
+                        $('#msteamsteststatus').html(data.responseText.message);
                     }
                 }
 
