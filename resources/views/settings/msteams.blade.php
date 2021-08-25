@@ -138,7 +138,7 @@
                 type: 'POST',
                 headers: {
                     //"X-Requested-With": 'XMLHttpRequest',
-                    //"X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
                     "Content-Type: application/json"
                 },
                 data: {

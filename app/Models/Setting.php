@@ -271,6 +271,19 @@ class Setting extends Model
     }
 
     /**
+     * The url for msteams notifications.
+     *  Used by Notifiable trait.
+     *
+     * @return string
+     */
+    public function routeNotificationForMSTeams(): string
+    {
+        // At this point the endpoint is the same for everything.
+        //  In the future this may want to be adapted for individual notifications.
+        return self::getSettings()->msteams_endpoint;
+    }
+
+    /**
      * Get the mail reply to address from configuration.
      *
      * @return string
