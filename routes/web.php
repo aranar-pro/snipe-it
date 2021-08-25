@@ -161,6 +161,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'authorize:superuser
 
     Route::get('barcodes', [SettingsController::class, 'getBarcodes'])->name('settings.barcodes.index');
     Route::post('barcodes', [SettingsController::class, 'postBarcodes'])->name('settings.barcodes.save');
+    
+    Route::get('msteams', ['as' => 'settings.msteams.index', 'uses' => 'SettingsController@getMSTeams']);
+    Route::post('msteams', ['as' => 'settings.msteams.save', 'uses' => 'SettingsController@postMSTeams']);
+
+    Route::get('asset_tags', ['as' => 'settings.asset_tags.index','uses' => 'SettingsController@getAssetTags' ]);
+    Route::post('asset_tags', ['as' => 'settings.asset_tags.save','uses' => 'SettingsController@postAssetTags' ]);
 
     Route::get('labels', [SettingsController::class, 'getLabels'])->name('settings.labels.index');
     Route::post('labels', [SettingsController::class, 'postLabels'])->name('settings.labels.save');
