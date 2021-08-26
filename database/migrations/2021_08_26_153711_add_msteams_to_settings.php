@@ -14,7 +14,7 @@ class AddMsteamsToSettings extends Migration
     public function up()
     {
         Schema::table('settings', function (Blueprint $table) {
-            //
+            $table->string('msteams_endpoint')->nullable()->default(NULL);
         });
     }
 
@@ -26,7 +26,7 @@ class AddMsteamsToSettings extends Migration
     public function down()
     {
         Schema::table('settings', function (Blueprint $table) {
-            //
+            $table->dropColumn('msteams_endpoint');
         });
     }
 }
