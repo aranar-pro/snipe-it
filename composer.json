@@ -34,6 +34,7 @@
     "guzzlehttp/guzzle": "^6.5",
     "intervention/image": "^2.5",
     "javiereguiluz/easyslugger": "^1.0",
+    "laravel-notification-channels/microsoft-teams": "^1.1",
     "laravel/framework": "^6.20",
     "laravel/helpers": "^1.2",
     "laravel/passport": "^9.3.2",
