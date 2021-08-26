@@ -291,7 +291,7 @@
                 <a href="{{ route('settings.msteams.index') }}">
                   <i class="fa fa-windows fa-4x" aria-hidden="true"></i>
                   <br><br>
-                  <span class="name">MS Teams</span>
+                  <span class="name">Microsoft Teams</span>
                 </a>
               </h5>
               <p class="help-block">Microsoft Teams settings</p>
