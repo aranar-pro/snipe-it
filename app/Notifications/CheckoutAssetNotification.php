@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
+use Illuminate\Notifications\Messages\MicrosoftTeamsChannel;
+use Illuminate\Notifications\Messages\MicrosoftTeamsMessage;
 use Illuminate\Notifications\Notification;
 
 class CheckoutAssetNotification extends Notification
@@ -51,11 +53,17 @@ class CheckoutAssetNotification extends Notification
      */
     public function via()
     {
+        // [0] slack, [1] mail, [2] microsoft teams
         $notifyBy = [];
 
         if (Setting::getSettings()->slack_endpoint != '') {
             \Log::debug('use slack');
             $notifyBy[] = 'slack';
+        }
+
+        if (Setting::getSettings()->msteams_endpoint != '') {
+            \Log::debug('use msteams');
+            $notifyBy[2] = 'msteams';
         }
 
         /**
