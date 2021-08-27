@@ -130,12 +130,17 @@ class CheckoutAssetNotification extends Notification
 
 public function toMicrosoftTeams($notifiable)
 {
+        $target = $this->target;
+        $admin = $this->admin;
+        $item = $this->item;
+        $note = $this->note;
+
     return MicrosoftTeamsMessage::create()
         ->to(Setting::getSettings()->msteams_endpoint)
         ->type('success')
-        ->title('checked out')
-        ->content('testing content')
-        ->button('View in Browser', 'https://digihumit.brocku.ca');
+        ->title('CFDH Equipment system: Asset Checked Out')
+        ->content('WIP')
+        ->button('View in Browser', ''.$target->present()->viewUrl().'');
 }
 
 

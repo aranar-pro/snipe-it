@@ -125,11 +125,13 @@
                                         @if ($snipeSettings->slack_endpoint!='')
                                             <i class="fab fa-slack" aria-hidden="true"></i>
                                             A slack message will be sent
+                                            <br>
                                         @endif
 
                                         @if ($snipeSettings->msteams_endpoint!='')
                                             <i class="fa fa-windows" aria-hidden="true"></i>
-                                            A slack message will be sent
+                                            A Microsoft Teams message will be sent
+                                            <br>
                                         @endif
 
                                     </div>
