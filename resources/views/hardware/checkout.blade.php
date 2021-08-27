@@ -105,7 +105,7 @@
                             </div>
                         </div>
 
-                        @if ($asset->requireAcceptance() || $asset->getEula() || ($snipeSettings->slack_endpoint!=''))
+                        @if ($asset->requireAcceptance() || $asset->getEula() || ($snipeSettings->slack_endpoint!='') || ($snipeSettings->msteams_endpoint!=''))
                             <div class="form-group notification-callout">
                                 <div class="col-md-8 col-md-offset-3">
                                     <div class="callout callout-info">
@@ -126,6 +126,12 @@
                                             <i class="fab fa-slack" aria-hidden="true"></i>
                                             A slack message will be sent
                                         @endif
+
+                                        @if ($snipeSettings->msteams_endpoint!='')
+                                            <i class="fa fa-windows" aria-hidden="true"></i>
+                                            A slack message will be sent
+                                        @endif
+
                                     </div>
                                 </div>
                             </div>
