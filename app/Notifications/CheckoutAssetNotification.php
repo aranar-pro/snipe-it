@@ -9,6 +9,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\MicrosoftTeams\MicrosoftTeamsChannel;
+use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
 
 class CheckoutAssetNotification extends Notification
 {
@@ -48,6 +50,8 @@ class CheckoutAssetNotification extends Notification
 
     /**
      * Get the notification's delivery channels.
+     * TODO: add $notifyBy [2] = MicrosoftTeamsChannel::class;
+     * 
      *
      * @return array
      */
@@ -59,6 +63,11 @@ class CheckoutAssetNotification extends Notification
         if (Setting::getSettings()->slack_endpoint!='') {
             \Log::debug('use slack');
             $notifyBy[] = 'slack';
+        }
+
+        if (Setting::getSettings()->msteams_endpoint != '') {
+            \Log::debug('use msteams');
+            $notifyBy[2] = MicrosoftTeamsChannel::class;
         }
 
 
@@ -123,7 +132,15 @@ class CheckoutAssetNotification extends Notification
     }
 
 
-
+public function toMicrosoftTeams($notifiable)
+{
+    return MicrosoftTeamsMessage::create()
+        ->to(Setting::getSettings()->msteams_endpoint)
+        ->type('success')
+        ->title('checked out')
+        ->content('testing content')
+        ->button('View in Browser', 'https://digihumit.brocku.ca');
+}
 
 
 
