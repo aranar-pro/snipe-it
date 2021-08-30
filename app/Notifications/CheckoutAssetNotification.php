@@ -130,22 +130,29 @@ class CheckoutAssetNotification extends Notification
 
 public function toMicrosoftTeams($notifiable)
 {
+        $expectedCheckin = 'None';
         $target = $this->target;
         $admin = $this->admin;
         $item = $this->item;
         $note = $this->note;
 
+        if (($this->expected_checkin) && ($this->expected_checkin != '')) {
+            $expectedCheckin = $this->expected_checkin;
+        }
+
     return MicrosoftTeamsMessage::create()
         ->to(Setting::getSettings()->msteams_endpoint)
         ->type('success')
-        ->title('CFDH Equipment system: Asset Checked Out')
-        ->content('WIP')
-        ->button('View in Browser', ''.$target->present()->viewUrl().'');
+        ->addStartGroupToSection($sectionId = 'action_msteams')
+        ->title('&#x2B06;&#x1F4BB; Asset Checked Out: <a href=' . $item->present()->viewUrl() . '>' . $item->present()->fullName() . '</a>', $params = ['section' => 'action_msteams'])
+        ->content($note, $params = ['section' => 'action_msteams'])
+        ->fact('To','<a href='.$target->present()->viewUrl().'>'.$target->present()->fullName().'</a>', $sectionId = 'action_msteams')
+        ->fact('By', '<a href='.$admin->present()->viewUrl().'>'.$admin->present()->fullName().'</a>', $sectionId = 'action_msteams')
+        ->fact('Expected Checkin', $expectedCheckin, $sectionId = 'action_msteams')
+        ->button('View in Browser', ''.$target->present()->viewUrl().'', $params = ['section' => 'action_msteams']);
 }
 
-
-
-
+//<a href='.$item->present()->viewUrl().'>'.$item->present()->name).'</a>
 
     /**
      * Get the mail representation of the notification.
