@@ -142,11 +142,11 @@ class CheckoutLicenseSeatNotification extends Notification
         }
 
         //this shouldn't be necessary.  why does $note work for CheckoutAsset = empty but not Licenses?
-        if (!$note)
+      /*  if (!$note)
         {
             $note = "Note: none.";
         }
-
+*/
         
         return MicrosoftTeamsMessage::create()
             ->to(Setting::getSettings()->msteams_endpoint)
