@@ -135,16 +135,10 @@ class CheckoutLicenseSeatNotification extends Notification
         $target = $this->target;
         $admin = $this->admin;
         $item = $this->item;
-        $note = $this->note;
+        $note = ($this->note) ? $item->note->name : '';
 
         if (($this->expected_checkin) && ($this->expected_checkin != '')) {
             $expectedCheckin = $this->expected_checkin;
-        }
-
-        //this shouldn't be necessary.  why does $note work for CheckoutAsset = empty but not Licenses?
-     if (!$note)
-        {
-            $note = "Note: none.";
         }
         
         return MicrosoftTeamsMessage::create()
