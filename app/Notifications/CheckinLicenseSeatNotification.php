@@ -109,7 +109,7 @@ class CheckinLicenseSeatNotification extends Notification
         $target = $this->target;
         $admin = $this->admin;
         $item = $this->item;
-        $note = ($this->note) ? $item->note->name : '';
+        $note = $this->note ?: 'No note provided.';
 
         return MicrosoftTeamsMessage::create()
             ->to(Setting::getSettings()->msteams_endpoint)
