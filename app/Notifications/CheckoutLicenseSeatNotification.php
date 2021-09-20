@@ -135,7 +135,7 @@ class CheckoutLicenseSeatNotification extends Notification
         $target = $this->target;
         $admin = $this->admin;
         $item = $this->item;
-        $note = ($this->note) ? $item->note->name : '';
+        $note = $this->note ?: 'No note provided.';
 
         if (($this->expected_checkin) && ($this->expected_checkin != '')) {
             $expectedCheckin = $this->expected_checkin;
