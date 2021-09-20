@@ -65,7 +65,7 @@
                 </div>
 
 
-                @if ($license->requireAcceptance() || $license->getEula() || ($snipeSettings->slack_endpoint!=''))
+                @if ($license->requireAcceptance() || $license->getEula() || ($snipeSettings->slack_endpoint!='') || ($snipeSettings->msteams_endpoint!=''))
                     <div class="form-group notification-callout">
                         <div class="col-md-8 col-md-offset-3">
                             <div class="callout callout-info">
