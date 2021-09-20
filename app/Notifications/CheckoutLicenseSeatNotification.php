@@ -18,7 +18,7 @@ class CheckoutLicenseSeatNotification extends Notification
     /**
      * @var
      */
-    //private $params;
+    private $params;
 
     /**
      * Create a new notification instance.
