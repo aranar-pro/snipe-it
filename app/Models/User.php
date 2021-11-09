@@ -632,7 +632,7 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
 
            $query = $query->where('first_name', 'LIKE', '%'.$search.'%')
                ->orWhere('last_name', 'LIKE', '%'.$search.'%')
-               ->orWhereRaw('CONCAT('.DB::getTablePrefix().'users.first_name," ",'.DB::getTablePrefix().'users.last_name) LIKE ?', ["%$search%", "%$search%"]);
+               ->orWhereRaw('CONCAT('.DB::getTablePrefix().'users.first_name," ",'.DB::getTablePrefix().'users.last_name) LIKE ?', ["%$search%"]);
         return $query;
     }
 
@@ -648,7 +648,7 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
     public function advancedTextSearch(Builder $query, array $terms) {
 
         foreach($terms as $term) {
-            $query = $query->orWhereRaw('CONCAT('.DB::getTablePrefix().'users.first_name," ",'.DB::getTablePrefix().'users.last_name) LIKE ?', ["%$term%", "%$term%"]);
+            $query = $query->orWhereRaw('CONCAT('.DB::getTablePrefix().'users.first_name," ",'.DB::getTablePrefix().'users.last_name) LIKE ?', ["%$term%"]);
         }
 
         return $query;

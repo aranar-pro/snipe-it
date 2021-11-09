@@ -114,26 +114,38 @@ class AssetsTransformer
         }
 
         $permissions_array['available_actions'] = [
-            'checkout' => Gate::allows('checkout', Asset::class),
-            'checkin' => Gate::allows('checkin', Asset::class),
-            'clone' => Gate::allows('create', Asset::class),
-            'restore' => false,
-            'update' => (bool) Gate::allows('update', Asset::class),
-            'delete' => ($asset->assigned_to=='' && Gate::allows('delete', Asset::class)),
+            'checkout'      => ($asset->deleted_at=='' && Gate::allows('checkout', Asset::class)) ? true : false,
+            'checkin'       => ($asset->deleted_at=='' && Gate::allows('checkin', Asset::class)) ? true : false,
+            'clone'         => Gate::allows('create', Asset::class) ? true : false,
+            'restore'       => ($asset->deleted_at!='' && Gate::allows('create', Asset::class)) ? true : false,
+            'update'        => ($asset->deleted_at=='' && Gate::allows('update', Asset::class)) ? true : false,
+            'delete'        => ($asset->deleted_at=='' && $asset->assigned_to =='' && Gate::allows('delete', Asset::class)) ? true : false,
         ];
 
-        if ($asset->deleted_at!='') {
-            $permissions_array['available_actions'] = [
-                'checkout' => true,
-                'checkin' => false,
-                'clone' => Gate::allows('create', Asset::class),
-                'restore' => Gate::allows('create', Asset::class),
-                'update' => false,
-                'delete' => false,
-            ];
+
+
+        if (request('components')=='true') {
+        
+            if ($asset->components) {
+                $array['components'] = [];
+    
+                foreach ($asset->components as $component) {
+                    $array['components'][] = [
+                        
+                            'id' => $component->id,
+                            'pivot_id' => $component->pivot->id,
+                            'name' => $component->name,
+                            'qty' => $component->pivot->assigned_qty,
+                            'price_cost' => $component->purchase_cost,
+                            'purchase_total' => $component->purchase_cost * $component->pivot->assigned_qty,
+                            'checkout_date' => Helper::getFormattedDateObject($component->pivot->created_at, 'datetime') ,
+                        
+                    ];
+                }
+            }
+
         }
-
-
+        
         $array += $permissions_array;
         return $array;
     }

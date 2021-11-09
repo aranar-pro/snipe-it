@@ -75,6 +75,10 @@ class UsersController extends Controller
             $users = $users->withTrashed();
         }
 
+        if ($request->filled('activated')) {
+            $users = $users->where('users.activated', '=', $request->input('activated'));
+        }
+
         if ($request->filled('company_id')) {
             $users = $users->where('users.company_id', '=', $request->input('company_id'));
         }
@@ -91,12 +95,40 @@ class UsersController extends Controller
             $users = $users->where('users.username', '=', $request->input('username'));
         }
 
+        if ($request->filled('first_name')) {
+            $users = $users->where('users.first_name', '=', $request->input('first_name'));
+        }
+
+        if ($request->filled('last_name')) {
+            $users = $users->where('users.last_name', '=', $request->input('last_name'));
+        }
+
+        if ($request->filled('employee_num')) {
+            $users = $users->where('users.employee_num', '=', $request->input('employee_num'));
+        }
+
+        if ($request->filled('state')) {
+            $users = $users->where('users.state', '=', $request->input('state'));
+        }
+
+        if ($request->filled('country')) {
+            $users = $users->where('users.country', '=', $request->input('country'));
+        }
+
+        if ($request->filled('zip')) {
+            $users = $users->where('users.zip', '=', $request->input('zip'));
+        }
+
         if ($request->filled('group_id')) {
             $users = $users->ByGroup($request->get('group_id'));
         }
 
         if ($request->filled('department_id')) {
             $users = $users->where('users.department_id','=',$request->input('department_id'));
+        }
+
+        if ($request->filled('manager_id')) {
+            $users = $users->where('users.manager_id','=',$request->input('manager_id'));
         }
 
         if ($request->filled('search')) {
@@ -408,12 +440,12 @@ class UsersController extends Controller
      * @param $userId
      * @return string JSON
      */
-    public function assets($id)
+    public function assets(Request $request, $id)
     {
         $this->authorize('view', User::class);
         $this->authorize('view', Asset::class);
         $assets = Asset::where('assigned_to', '=', $id)->where('assigned_type', '=', User::class)->with('model')->get();
-        return (new AssetsTransformer)->transformAssets($assets, $assets->count());
+        return (new AssetsTransformer)->transformAssets($assets, $assets->count(), $request);
     }
 
     /**

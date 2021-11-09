@@ -102,11 +102,7 @@ class ReportsController extends Controller
     {
         $this->authorize('reports.view');
         $depreciations = Depreciation::get();
-        // Grab all the assets
-        $assets = Asset::with( 'assignedTo', 'assetstatus', 'defaultLoc', 'location', 'company', 'model.category', 'model.depreciation')
-                       ->orderBy('created_at', 'DESC')->get();
-
-        return view('reports/depreciation', compact('assets'))->with('depreciations',$depreciations);
+        return view('reports/depreciation')->with('depreciations',$depreciations);
     }
 
     /**
@@ -563,7 +559,7 @@ class ReportsController extends Controller
 
 
             foreach ($customfields as $customfield) {
-                if (e($request->input($customfield->db_column_name())) == '1') {
+                if ($request->input($customfield->db_column_name()) == '1') {
                     $header[] = $customfield->name;
                 }
             }

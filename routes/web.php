@@ -39,7 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group([ 'prefix' => 'manufacturers', 'middleware' => ['auth'] ], function () {
 
-        Route::get('{manufacturers_id}/restore', [ 'as' => 'restore/manufacturer', 'uses' => 'ManufacturersController@restore']);
+        Route::post('{manufacturers_id}/restore', [ 'as' => 'restore/manufacturer', 'uses' => 'ManufacturersController@restore']);
     });
 
     Route::resource('manufacturers', 'ManufacturersController', [
@@ -466,12 +466,6 @@ Route::group(['middleware' => 'web'], function () {
             'uses' => 'Auth\LoginController@login' ]
     );
 
-    Route::get(
-        'logout',
-        [
-            'as' => 'logout',
-            'uses' => 'Auth\LoginController@logout' ]
-    );
 
 });
 
