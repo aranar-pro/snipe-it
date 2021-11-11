@@ -129,7 +129,7 @@
                                         @endif
 
                                         @if ($snipeSettings->msteams_endpoint!='')
-                                            <i class="fa fa-windows" aria-hidden="true"></i>
+                                            <i class="fab fa-microsoft" aria-hidden="true"></i>
                                             A Microsoft Teams message will be sent
                                             <br>
                                         @endif
