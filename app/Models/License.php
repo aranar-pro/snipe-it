@@ -46,6 +46,7 @@ class License extends Depreciable
         'license_email'   => 'email|nullable|max:120',
         'license_name'   => 'string|nullable|max:100',
         'notes'   => 'string|nullable',
+        'codes'   => 'string|nullable',
         'category_id' => 'required|exists:categories,id',
         'company_id' => 'integer|nullable',
     ];
@@ -71,6 +72,7 @@ class License extends Depreciable
         'purchase_date',
         'purchase_order',
         'reassignable',
+        'codes',
         'seats',
         'serial',
         'supplier_id',
@@ -88,6 +90,7 @@ class License extends Depreciable
     protected $searchableAttributes = [
         'name',
         'serial',
+        'codes',
         'notes',
         'order_number',
         'purchase_order',

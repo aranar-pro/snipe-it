@@ -42,6 +42,12 @@ class LicensePresenter extends Presenter
                 'title' => trans('admin/licenses/form.license_key'),
                 'formatter' => 'licensesLinkFormatter',
             ], [
+                'field' => 'codes',
+                'searchable' => true,
+                'sortable' => true,
+                'title' => trans('admin/licenses/form.codes'),
+                'formatter' => 'licensesLinkFormatter',
+            ], [  
                 'field' => 'expiration_date',
                 'searchable' => true,
                 'sortable' => true,
@@ -229,6 +235,14 @@ class LicensePresenter extends Presenter
                 'title' => trans('general.location'),
                 'visible' => true,
                 'formatter' => 'locationsLinkObjFormatter',
+            ],
+            [
+                'field' => 'code',
+                'searchable' => false,
+                'sortable' => false,
+                'switchable' => true,
+                'title' => trans('admin/licenses/general.seat'),
+                'visible' => true,
             ],
             [
                 'field' => 'checkincheckout',
