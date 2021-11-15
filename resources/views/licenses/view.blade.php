@@ -107,6 +107,20 @@
                   </div>
                 @endif
 
+                @if (!is_null($license->codes))
+                  <div class="row">
+                    <div class="col-md-3">
+                      <strong>{{ trans('admin/licenses/form.codes') }}</strong>
+                    </div>
+                    <div class="col-md-9">
+                      @can('viewKeys', $license)
+                        {!! nl2br(e($license->codes)) !!}
+                      @else
+                        ------------
+                      @endcan
+                    </div>
+                  </div>
+                @endif
 
                 @if ($license->category)
                   <div class="row">

@@ -43,11 +43,17 @@ class LicensePresenter extends Presenter
                 "title" => trans('admin/licenses/form.license_key'),
                 "formatter" => "licensesLinkFormatter"
             ], [
-                "field" => "expiration_date",
-                "searchable" => true,
-                "sortable" => true,
-                "title" => trans('admin/licenses/form.expiration'),
-                'formatter' => 'dateDisplayFormatter'
+                'field' => 'codes',
+                'searchable' => true,
+                'sortable' => true,
+                'title' => trans('admin/licenses/form.codes'),
+                'formatter' => 'licensesLinkFormatter',
+            ], [  
+                'field' => 'expiration_date',
+                'searchable' => true,
+                'sortable' => true,
+                'title' => trans('admin/licenses/form.expiration'),
+                'formatter' => 'dateDisplayFormatter',
             ], [
                 "field" => "license_email",
                 "searchable" => true,
@@ -234,14 +240,22 @@ class LicensePresenter extends Presenter
                 "formatter" => "locationsLinkObjFormatter"
             ],
             [
-                "field" => "checkincheckout",
-                "searchable" => false,
-                "sortable" => false,
-                "switchable" => true,
-                "title" => trans('general.checkin').'/'.trans('general.checkout'),
-                "visible" => true,
-                "formatter" => "licenseSeatInOutFormatter"
-            ]
+                'field' => 'code',
+                'searchable' => false,
+                'sortable' => false,
+                'switchable' => true,
+                'title' => trans('admin/licenses/general.seat'),
+                'visible' => true,
+            ],
+            [
+                'field' => 'checkincheckout',
+                'searchable' => false,
+                'sortable' => false,
+                'switchable' => true,
+                'title' => trans('general.checkin').'/'.trans('general.checkout'),
+                'visible' => true,
+                'formatter' => 'licenseSeatInOutFormatter',
+            ],
         ];
 
         return json_encode($layout);
