@@ -8,6 +8,9 @@ use App\Notifications\CheckoutLicenseNotification;
 use App\Presenters\Presentable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Illuminate\Support\Facades\Log;
+
+
 class LicenseSeat extends SnipeModel implements ICompanyableChild
 {
     use CompanyableChildTrait;
@@ -28,6 +31,7 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
     protected $fillable = [
         'assigned_to',
         'asset_id',
+        'codes',
     ];
 
     use Acceptable;
@@ -91,6 +95,18 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
     }
 
     /**
+     * Establishes the seat -> codes relationship
+     *
+     * @author A. Gianotto <snipe@snipe.net>
+     * @since [v4.0]
+     * @return \Illuminate\Database\Eloquent\Relations\Relation
+     */
+    public function codes()
+    {
+        return $this->belongsTo(\App\Models\Licenses::class, 'codes')->withTrashed();
+    }
+
+    /**
      * Determines the assigned seat's location based on user
      * or asset its assigned to
      *
@@ -123,4 +139,19 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
             ->leftJoin('departments as license_user_dept', 'license_user_dept.id', '=', 'license_seat_users.department_id')
             ->orderBy('license_user_dept.name', $order);
     }
+
+
+    //populate seat codes from license array
+    public function populateSeatCodes($license){
+        Log::info($license);
+        $something = explode(',', $license['codes']);
+        foreach ($something as $sm) {
+         $licenseSeats = new LicenseSeat;
+         $licenseSeats->codes = $sm;
+         $licenseSeats->save(); 
+        }
+        return true;
+
+    }
+
 }

@@ -39,6 +39,19 @@
     <label for="codes" class="col-md-3 control-label">{{ trans('admin/licenses/form.codes') }}</label>
     <div class="col-md-7{{  (Helper::checkIfRequired($item, 'codes')) ? ' required' : '' }}">
         <textarea class="form-control" type="text" name="codes" id="codes">{{ old('codes', $item->codes) }}</textarea>
+        
+            <script>
+                 const codesText = document.getElementById("codes")
+                 const seatCount = document.getElementById("seats")
+                    codesText.addEventListener('input', () => {
+                        var numSeats = codesText.value.split(",");
+                        seatCount.value = numSeats.length;
+                        //alert(numSeats);
+                    })
+
+             // alert(document.getElementById("codes").value);
+            </script>
+      
         {!! $errors->first('codes', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
     </div>
 </div>
