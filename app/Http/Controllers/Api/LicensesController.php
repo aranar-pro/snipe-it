@@ -49,6 +49,10 @@ class LicensesController extends Controller
             $licenses->where('purchase_order','=',$request->input('purchase_order'));
         }
 
+        if ($request->filled('codes')) {
+            $licenses->where('codes', '=', $request->input('codes'));
+        }
+
         if ($request->filled('license_name')) {
             $licenses->where('license_name','=',$request->input('license_name'));
         }
@@ -128,7 +132,8 @@ class LicensesController extends Controller
                         'free_seats_count',
                         'seats',
                         'termination_date',
-                        'depreciation_id'
+                        'depreciation_id',
+                        'codes',
                     ];
                 $sort = in_array($request->input('sort'), $allowed_columns) ? e($request->input('sort')) : 'created_at';
                 $licenses = $licenses->orderBy($sort, $order);
