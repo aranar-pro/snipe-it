@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Watson\Validating\ValidatingTrait;
 
+
+
 class License extends Depreciable
 {
     protected $presenter = 'App\Presenters\LicensePresenter';
@@ -178,9 +180,17 @@ class License extends Depreciable
         }
         // Else we're adding seats.
         DB::transaction(function () use ($license, $oldSeats, $newSeats) {
+            // Log::info($license);
+            
             for ($i = $oldSeats; $i < $newSeats; $i++) {
+                
+              //  Log::info($oldSeats);   
+              //  Log::info($newSeats);   
                 $license->licenseSeatsRelation()->save(new LicenseSeat, ['user_id' => Auth::id()]);
+                //$license->licenseSeatsRelation()->save(new LicenseSeat, ['user_id' => Auth::id(), 'codes' => 'fake']);
             }
+            $ls = new LicenseSeat;
+            $ls->populateSeatCodes($license);
         });
         // On initail create, we shouldn't log the addition of seats.
         if ($license->id) {

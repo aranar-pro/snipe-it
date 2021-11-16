@@ -240,11 +240,11 @@ class LicensePresenter extends Presenter
                 "formatter" => "locationsLinkObjFormatter"
             ],
             [
-                'field' => 'code',
+                'field' => 'codes',
                 'searchable' => false,
                 'sortable' => false,
                 'switchable' => true,
-                'title' => trans('admin/licenses/general.seat'),
+                'title' => trans('admin/licenses/form.codes'),
                 'visible' => true,
             ],
             [
