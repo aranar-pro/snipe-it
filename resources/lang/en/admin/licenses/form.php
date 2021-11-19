@@ -7,6 +7,7 @@ return [
     'create'            => 'Create License',
     'expiration'        => 'Expiration Date',
     'license_key'       => 'Product Key',
+    'hascodes'          => 'Show Seat Codes',
     'codes'             => "Seat Codes",
     'maintained'        => 'Maintained',
     'name'              => 'Software Name',

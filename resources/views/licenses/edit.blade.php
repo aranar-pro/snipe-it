@@ -29,6 +29,7 @@
         <div class="col-md-2" style="padding-left:0px">
             <input class="form-control" type="text" name="seats" id="seats" value="{{ Request::old('seats', $item->seats) }}" />
         </div>
+            {{-- <input type="checkbox" name="hasSeatCodes" id="seatCodes" />{{trans('admin/licenses/form.hascodes')}} --}}
     </div>
     {!! $errors->first('seats', '<div class="col-md-8 col-md-offset-3"><span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span></div>') !!}
 </div>
@@ -41,15 +42,12 @@
         <textarea class="form-control" type="text" name="codes" id="codes">{{ old('codes', $item->codes) }}</textarea>
         
             <script>
-                 const codesText = document.getElementById("codes")
-                 const seatCount = document.getElementById("seats")
+                 const codesText = document.getElementById("codes");
+                 const seatCount = document.getElementById("seats");
                     codesText.addEventListener('input', () => {
-                        var numSeats = codesText.value.split(",");
+                        var numSeats = codesText.value.split(/[,|.|\n|\r|\r\n]/).filter(Boolean);
                         seatCount.value = numSeats.length;
-                        //alert(numSeats);
-                    })
-
-             // alert(document.getElementById("codes").value);
+                    });
             </script>
       
         {!! $errors->first('codes', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Watson\Validating\ValidatingTrait;
 
-
+use Illuminate\Support\Facades\Log;
 
 class License extends Depreciable
 {
@@ -146,14 +146,42 @@ class License extends Depreciable
      */
     public static function adjustSeatCount($license, $oldSeats, $newSeats)
     {
-        // If the seats haven't changed, continue on happily.
-        if ($oldSeats == $newSeats) {
-            return true;
-        }
+
+        //this isn't coming from form, it's coming from DB so use the DB license->codes and split that to array.
+        //it's not sufficient to add without reordering because you can do both (this is currently the case without return true)
+
+        $license->load('licenseseats.user');
+
+        //regardless if number of seats change, fix the order of the codes
+        //this isn't the new order this is what's in the db
+        Log::info($license);
+
+        $seatCodes = $license->getSeatCodes($license->codes);
+
+         //Log::info($seatCodes);
+
         // On Create, we just make one for each of the seats.
+        //First we add
         $change = abs($oldSeats - $newSeats);
-        if ($oldSeats > $newSeats) {
-            $license->load('licenseseats.user');
+
+        if ($oldSeats < $newSeats) {
+            //adding to seats
+            DB::transaction(function () use ($license, $oldSeats, $newSeats, $seatCodes) {
+                // Log::info($license);
+
+                for ($i = $oldSeats; $i < $newSeats; $i++) {
+
+                    //fill our model
+                    $licenseSeat = new LicenseSeat([
+                        'user_id' => Auth::id(),
+                        'codes' =>  $seatCodes[$i],
+                    ]);
+                    //add seats with codes
+                    $license->licenseSeatsRelation()->save($licenseSeat);
+                }
+            });
+
+        }  elseif ($oldSeats > $newSeats) {
 
             // Need to delete seats... lets see if if we have enough.
             $seatsAvailableForDelete = $license->licenseseats->reject(function ($seat) {
@@ -167,7 +195,13 @@ class License extends Depreciable
             }
             for ($i = 1; $i <= $change; $i++) {
                 $seatsAvailableForDelete->pop()->delete();
+               
+               
             }
+
+            $license->load('licenseseats.user');
+            Log::info($license->licenseseats->count());
+            
             // Log Deletion of seats.
             $logAction = new Actionlog;
             $logAction->item_type = self::class;
@@ -176,23 +210,16 @@ class License extends Depreciable
             $logAction->note = "deleted ${change} seats";
             $logAction->target_id = null;
             $logAction->logaction('delete seats');
-
-            return true;
+       
+           
         }
-        // Else we're adding seats.
-        DB::transaction(function () use ($license, $oldSeats, $newSeats) {
-            // Log::info($license);
-            
-            for ($i = $oldSeats; $i < $newSeats; $i++) {
-                
-              //  Log::info($oldSeats);   
-              //  Log::info($newSeats);   
-                $license->licenseSeatsRelation()->save(new LicenseSeat, ['user_id' => Auth::id()]);
-                //$license->licenseSeatsRelation()->save(new LicenseSeat, ['user_id' => Auth::id(), 'codes' => 'fake']);
-            }
-            $ls = new LicenseSeat;
-            $ls->populateSeatCodes($license);
-        });
+
+        //remap and save our license codes after they've been editted.
+       foreach ($license->licenseseats as $key => $ls){
+            $ls['codes'] = $seatCodes [$key];
+            $license->licenseSeatsRelation()->save($ls);
+        }
+
         // On initail create, we shouldn't log the addition of seats.
         if ($license->id) {
             //Log the addition of license to the log.
@@ -207,6 +234,7 @@ class License extends Depreciable
 
         return true;
     }
+
 
     /**
      * Sets the attribute for whether or not the license is maintained
@@ -687,5 +715,15 @@ class License extends Depreciable
     {
         return $query->leftJoin('companies as companies', 'licenses.company_id', '=', 'companies.id')->select('licenses.*')
             ->orderBy('companies.name', $order);
+    }
+
+
+    //populate seat codes array
+    public function getSeatCodes($lseat)
+    {
+        $pattern = "/[,|.|\n|\r|\r\n]/";
+        $seatCodesArray = preg_split($pattern, $lseat, -1, PREG_SPLIT_NO_EMPTY);
+
+        return $seatCodesArray;
     }
 }
