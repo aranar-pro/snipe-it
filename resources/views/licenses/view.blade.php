@@ -114,7 +114,8 @@
                     </div>
                     <div class="col-md-9">
                       @can('viewKeys', $license)
-                        {!! nl2br(e($license->codes)) !!}
+                      <p>Multiple</p>
+                     {{--  {!! nl2br(e($license->codes)) !!} --}}
                       @else
                         ------------
                       @endcan
@@ -372,7 +373,6 @@
                         "ignoreColumn": ["actions","image","change","checkbox","checkincheckout","icon"]
                         }'>
                 </table>
-
               </div>
 
             </div>

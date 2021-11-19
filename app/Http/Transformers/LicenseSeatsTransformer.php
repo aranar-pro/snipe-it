@@ -6,6 +6,8 @@ use App\Models\LicenseSeat;
 use Gate;
 use Illuminate\Database\Eloquent\Collection;
 
+use Illuminate\Support\Facades\Log;
+
 class LicenseSeatsTransformer
 {
 
@@ -45,8 +47,10 @@ class LicenseSeatsTransformer
                 'name'=> e($seat->location()->name)
             ] : null,
             'reassignable' => (bool) $seat->license->reassignable,
-            'user_can_checkout' => (($seat->assigned_to=='') && ($seat->asset_id=='')),
+            'user_can_checkout' => (($seat->assigned_to == '') && ($seat->asset_id == '')),
+            'codes' => $seat->codes,
         ];
+        //Log::info($seat->codes);
 
         if($seat_count != 0) {
             $array['name'] = 'Seat '.$seat_count;
