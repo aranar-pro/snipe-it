@@ -102,7 +102,7 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
      */
     public function codes()
     {
-        return $this->belongsTo(\App\Models\Licenses::class, 'codes')->withTrashed();
+        return $this->belongsTo(\App\Models\LicenseSeat::class, 'codes')->withTrashed();
     }
 
     /**
@@ -143,15 +143,11 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
 
 
     //populate seat codes from license array
-    public function populateSeatCodes($license){
-        Log::info($license);
-        $something = explode(',', $license['codes']);
-        foreach ($something as $sm) {
-         $licenseSeats = new LicenseSeat;
-         $licenseSeats->codes = $sm;
-         $licenseSeats->save(); 
-        }
-        return true;
+    public function getSeatCodes($license, $index){
+        
+        $seatCodesArray = explode(',', $license['codes']);
+
+        return $seatCodesArray[$index];
 
     }
 
