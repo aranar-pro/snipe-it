@@ -7,7 +7,7 @@ return array(
     'create'            => 'Create License',
     'expiration'        => 'Expiration Date',
     'license_key'       => 'Product Key',
-    'hascodes'          => 'Show Seat Codes',
+    'has_codes'          => 'Show Seat Codes',
     'codes'             => "Seat Codes",
     'maintained'        => 'Maintained',
     'name'              => 'Software Name',
