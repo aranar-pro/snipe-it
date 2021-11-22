@@ -29,28 +29,31 @@
         <div class="col-md-2" style="padding-left:0px">
             <input class="form-control" type="text" name="seats" id="seats" value="{{ Request::old('seats', $item->seats) }}" />
         </div>
-            {{-- <input type="checkbox" name="hasSeatCodes" id="seatCodes" />{{trans('admin/licenses/form.hascodes')}} --}}
+            {{-- <input type="checkbox" name="hasSeatCodes" id="seatCodes" />{{trans('admin/licenses/form.has_codes')}} --}}
     </div>
     {!! $errors->first('seats', '<div class="col-md-8 col-md-offset-3"><span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span></div>') !!}
 </div>
 
+
+<!-- show/hide seat codes field -->
+<div class="form-group {{ $errors->has('has_codes') ? ' has-error' : '' }}">
+    <label for="has_codes" class="col-md-3 control-label">{{ trans('admin/licenses/form.has_codes') }}</label>
+    <div class="col-md-7 input-group">
+        {{ Form::Checkbox('has_codes', '1', old('has_codes', $item->id ? $item->has_codes : '1'),array('class' => 'minimal', 'aria-label'=>'has_seat_codes','id' => 'has_seat_codes')) }}
+        {{ trans('general.yes') }}
+       
+    </div>
+</div>
+
 <!-- codes-->
 @can('viewCodes', $item)
-<div class="form-group {{ $errors->has('codes') ? ' has-error' : '' }}">
-    <label for="codes" class="col-md-3 control-label">{{ trans('admin/licenses/form.codes') }}</label>
-    <div class="col-md-7{{  (Helper::checkIfRequired($item, 'codes')) ? ' required' : '' }}">
-        <textarea class="form-control" type="text" name="codes" id="codes">{{ old('codes', $item->codes) }}</textarea>
-        
-            <script>
-                 const codesText = document.getElementById("codes");
-                 const seatCount = document.getElementById("seats");
-                    codesText.addEventListener('input', () => {
-                        var numSeats = codesText.value.split(/[,|.|\n|\r|\r\n]/).filter(Boolean);
-                        seatCount.value = numSeats.length;
-                    });
-            </script>
-      
-        {!! $errors->first('codes', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
+<div id="seat_codes_field">
+    <div class="form-group {{ $errors->has('codes') ? ' has-error' : '' }}">
+        <label for="codes" class="col-md-3 control-label">{{ trans('admin/licenses/form.codes') }}</label>
+        <div class="col-md-7{{  (Helper::checkIfRequired($item, 'codes')) ? ' required' : '' }}">
+            <textarea class="form-control" type="text" name="codes" id="codes">{{ old('codes', $item->codes) }}</textarea>
+            {!! $errors->first('codes', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
+        </div>
     </div>
 </div>
 @endcan
@@ -141,4 +144,28 @@
 
 @include ('partials.forms.edit.notes')
 
+@stop
+
+
+@section('moar_scripts')
+
+<script nonce="{{ csrf_token() }}">
+
+$(document).ready(function() {
+    const codesText = document.getElementById("codes");
+    const seatCount = document.getElementById("seats");
+
+    codesText.addEventListener('input', () => {
+        var numSeats = codesText.value.split(/[,|.|\n|\r|\r\n]/).filter(Boolean);
+        seatCount.value = numSeats.length;
+    });
+
+    $('input#has_seat_codes').on('ifChecked', function(){
+        alert("yep");
+    });
+
+
+});
+
+</script>
 @stop

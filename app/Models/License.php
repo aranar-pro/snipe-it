@@ -154,11 +154,8 @@ class License extends Depreciable
 
         //regardless if number of seats change, fix the order of the codes
         //this isn't the new order this is what's in the db
-        Log::info($license);
 
         $seatCodes = $license->getSeatCodes($license->codes);
-
-         //Log::info($seatCodes);
 
         // On Create, we just make one for each of the seats.
         //First we add
@@ -167,7 +164,7 @@ class License extends Depreciable
         if ($oldSeats < $newSeats) {
             //adding to seats
             DB::transaction(function () use ($license, $oldSeats, $newSeats, $seatCodes) {
-                // Log::info($license);
+
 
                 for ($i = $oldSeats; $i < $newSeats; $i++) {
 
@@ -180,6 +177,18 @@ class License extends Depreciable
                     $license->licenseSeatsRelation()->save($licenseSeat);
                 }
             });
+
+            // On initail create, we shouldn't log the addition of seats.
+            if ($license->id) {
+                //Log the addition of license to the log.
+                $logAction = new Actionlog();
+                $logAction->item_type = self::class;
+                $logAction->item_id = $license->id;
+                $logAction->user_id = Auth::id() ?: 1; // Importer.
+                $logAction->note = "added ${change} seats";
+                $logAction->target_id = null;
+                $logAction->logaction('add seats');
+            }
 
         }  elseif ($oldSeats > $newSeats) {
 
@@ -198,9 +207,8 @@ class License extends Depreciable
                
                
             }
-
+            //make sure to re-load this after adding 
             $license->load('licenseseats.user');
-            Log::info($license->licenseseats->count());
             
             // Log Deletion of seats.
             $logAction = new Actionlog;
@@ -220,17 +228,11 @@ class License extends Depreciable
             $license->licenseSeatsRelation()->save($ls);
         }
 
-        // On initail create, we shouldn't log the addition of seats.
-        if ($license->id) {
-            //Log the addition of license to the log.
-            $logAction = new Actionlog();
-            $logAction->item_type = self::class;
-            $logAction->item_id = $license->id;
-            $logAction->user_id = Auth::id() ?: 1; // Importer.
-            $logAction->note = "added ${change} seats";
-            $logAction->target_id = null;
-            $logAction->logaction('add seats');
-        }
+        //ideally we're going to log when seat codes have been changed
+        //can we compare to old array (maybe before and after $License load) and see which has changed?
+        //maybe only log changes that have occured to codes checked out to users?  Probably makes the most sense.
+
+        
 
         return true;
     }
