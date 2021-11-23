@@ -151,9 +151,6 @@
 
 $(document).ready(function() {
 
-
-   // $('#seat_codes_field').hide();
-
     const codesText = document.getElementById("codes");
     const seatCount = document.getElementById("seats");
 
@@ -162,7 +159,6 @@ $(document).ready(function() {
         seatCount.value = numSeats.length;
     });
 
-   // $('input#has_seat_codes').on('ifChanged', function(event){ alert("changed"); });
     $('input#has_seat_codes').on('ifChecked', function(event){ $('#seat_codes_field').show(); });
     $('input#has_seat_codes').on('ifUnchecked', function(event){ $('#seat_codes_field').hide();});
 
