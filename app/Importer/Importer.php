@@ -55,6 +55,7 @@ abstract class Importer
         'reassignable' => 'reassignable',
         'requestable' => 'requestable',
         'seats' => 'seats',
+        'codes' => 'codes',
         'serial_number' => 'serial number',
         'status' => 'status',
         'supplier' => 'supplier',

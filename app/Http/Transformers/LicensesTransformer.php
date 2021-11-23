@@ -36,6 +36,7 @@ class LicensesTransformer
             'notes' => e($license->notes),
             'expiration_date' => Helper::getFormattedDateObject($license->expiration_date, 'date'),
             'seats' => (int) $license->seats,
+            'codes' => e($license->codes),
             'free_seats_count' => (int) $license->free_seats_count,
             'license_name' =>  e($license->license_name),
             'license_email' => e($license->license_email),
@@ -46,6 +47,7 @@ class LicensesTransformer
             'created_at' => Helper::getFormattedDateObject($license->created_at, 'datetime'),
             'updated_at' => Helper::getFormattedDateObject($license->updated_at, 'datetime'),
             'user_can_checkout' => (bool) ($license->free_seats_count > 0),
+            'has_codes' => ($license->has_codes == 1) ? true : false,
         ];
 
         $permissions_array['available_actions'] = [
