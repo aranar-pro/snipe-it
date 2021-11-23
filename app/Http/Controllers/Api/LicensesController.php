@@ -48,6 +48,10 @@ class LicensesController extends Controller
             $licenses->where('purchase_order', '=', $request->input('purchase_order'));
         }
 
+        if ($request->filled('has_codes')) {
+            $licenses->where('has_codes', '=', $request->input('has_codes'));
+        }
+
         if ($request->filled('codes')) {
             $licenses->where('codes', '=', $request->input('codes'));
         }
@@ -142,6 +146,7 @@ class LicensesController extends Controller
                         'termination_date',
                         'depreciation_id',
                         'codes',
+                        'has_codes',
                     ];
                 $sort = in_array($request->input('sort'), $allowed_columns) ? e($request->input('sort')) : 'created_at';
                 $licenses = $licenses->orderBy($sort, $order);

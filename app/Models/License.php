@@ -75,6 +75,7 @@ class License extends Depreciable
         'purchase_order',
         'reassignable',
         'codes',
+        'has_codes',
         'seats',
         'serial',
         'supplier_id',
@@ -232,7 +233,7 @@ class License extends Depreciable
         //can we compare to old array (maybe before and after $License load) and see which has changed?
         //maybe only log changes that have occured to codes checked out to users?  Probably makes the most sense.
 
-        
+
 
         return true;
     }
@@ -719,7 +720,14 @@ class License extends Depreciable
             ->orderBy('companies.name', $order);
     }
 
-
+    /**
+     * Parse list of seat codes 
+     * regex pattern should be kept consistent with front end parser in edit.blade.php 
+     *
+     * @author A. Roth <aroth21@mac.com>
+     * @since [v6.0]
+     * @return String[]
+     */
     //populate seat codes array
     public function getSeatCodes($lseat)
     {

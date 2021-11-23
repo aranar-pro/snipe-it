@@ -47,7 +47,15 @@ class LicensePresenter extends Presenter
                 'sortable' => true,
                 'title' => trans('admin/licenses/form.codes'),
                 
-            ], [  
+            ], [
+                'field' => 'has_codes',
+                'searchable' => false,
+                'sortable' => true,
+                'visible' => false,
+                'title' => trans('admin/licenses/form.has_codes'),
+                'formatter' => 'trueFalseFormatter',
+            ],
+            [  
                 'field' => 'expiration_date',
                 'searchable' => true,
                 'sortable' => true,
