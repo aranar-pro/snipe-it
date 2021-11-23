@@ -7,8 +7,6 @@ use App\Notifications\CheckoutLicenseNotification;
 use App\Presenters\Presentable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use Illuminate\Support\Facades\Log;
-
 
 class LicenseSeat extends SnipeModel implements ICompanyableChild
 {
@@ -142,13 +140,5 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
     }
 
 
-    //populate seat codes from license array
-    public function getSeatCodes($license, $index){
-        
-        $seatCodesArray = explode(',', $license['codes']);
-
-        return $seatCodesArray[$index];
-
-    }
 
 }
