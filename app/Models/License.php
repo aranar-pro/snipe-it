@@ -149,6 +149,7 @@ class License extends Depreciable
     public static function adjustSeatCount($license, $oldSeats, $newSeats)
     {
 
+        Log::info('hello');
         //this isn't coming from form, it's coming from DB so use the DB license->codes and split that to array.
         //it's not sufficient to add without reordering because you can do both (this is currently the case without return true)
 
@@ -179,7 +180,9 @@ class License extends Depreciable
                     $license->licenseSeatsRelation()->save($licenseSeat);
                 }
             });
-
+            //Make sure this is current before we log changes.
+            $license->load('licenseseats.user');
+           
             // On initail create, we shouldn't log the addition of seats.
             if ($license->id) {
                 //Log the addition of license to the log.
@@ -208,7 +211,7 @@ class License extends Depreciable
                
                
             }
-            //make sure to re-load this after adding 
+            //make sure to re-load this after deleting 
             $license->load('licenseseats.user');
             
             // Log Deletion of seats.
@@ -223,7 +226,15 @@ class License extends Depreciable
            
         }
 
-        //remap and save our license codes after they've been editted.
+        //create array of licenses that have been checked out to users
+
+        $checked_out_and_modified = $license->licenseseats->filter(function ($seat) {
+            return $seat->assigned_to != null;
+        });
+
+       
+
+        //remap and save our license codes whether or not they've been editted.
        foreach ($license->licenseseats as $key => $ls){
             $ls['codes'] = $seatCodes [$key];
             $license->licenseSeatsRelation()->save($ls);
@@ -233,8 +244,25 @@ class License extends Depreciable
         //can we compare to old array (maybe before and after $License load) and see which has changed?
         //maybe only log changes that have occured to codes checked out to users?  Probably makes the most sense.
 
+        if (is_array($checked_out_and_modified)){
+            foreach($checked_out_and_modified as $mods) {
+                Log::info($mods);
+            }
 
+        }
 
+        //this is temporary, this should actually reflect if the list has changed (regardless of count) or if assigned license has changed codes
+        if ($change > 0){
+
+            // Log Update of assets.
+            $logAction = new Actionlog;
+            $logAction->item_type = License::class;
+            $logAction->item_id = $license->id;
+            $logAction->user_id = Auth::id() ?: 1; // We don't have an id while running the importer from CLI.
+            $logAction->note = "updated ${change} seats";
+            $logAction->target_id =  null;
+            $logAction->logaction('update seats');
+        }
         return true;
     }
 
