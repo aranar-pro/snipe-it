@@ -222,6 +222,7 @@
     'unknown_admin'			=> 'Unknown Admin',
     'username_format'		=> 'Username Format',
     'update'                => 'Update',
+    'update_seats'         => 'Updated Seats',
     'upload_filetypes_help'      => 'Allowed filetypes are png, gif, jpg, jpeg, doc, docx, pdf, xls, xlsx, txt, lic, xml, zip, rtf and rar. Max upload size allowed is :size.',
     'uploaded'              => 'Uploaded',
     'user'					=> 'User',
