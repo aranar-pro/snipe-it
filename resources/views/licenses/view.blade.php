@@ -109,12 +109,12 @@
 
                 @if (!is_null($license->codes))
                   <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                       <strong>{{ trans('admin/licenses/form.codes') }}</strong>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-8">
                       @can('viewKeys', $license)
-                      <p>Multiple</p>
+                       Multiple 
                      {{--  {!! nl2br(e($license->codes)) !!} --}}
                       @else
                         ------------
