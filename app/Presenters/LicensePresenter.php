@@ -47,7 +47,7 @@ class LicensePresenter extends Presenter
                 'searchable' => true,
                 'sortable' => true,
                 'title' => trans('admin/licenses/form.codes'),
-                
+                "formatter" => "multipleValuesFormatter",
             ], [
                 'field' => 'has_codes',
                 'searchable' => false,
