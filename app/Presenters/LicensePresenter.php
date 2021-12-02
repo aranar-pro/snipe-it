@@ -299,6 +299,15 @@ class LicensePresenter extends Presenter
     }
 
     /**
+     * Link to this licenses serial
+     * @return string
+     */
+    public function assignedSeatCodes()
+    {
+        return (string) link_to('/licenses/' . $this->id .'#seats', mb_strimwidth($this->assignedusers()->count(), 0, 50, "..."));
+    }
+
+    /**
      * Url to view this item.
      * @return string
      */

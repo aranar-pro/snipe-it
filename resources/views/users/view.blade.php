@@ -443,6 +443,7 @@
                 <tr>
                   <th class="col-md-5">{{ trans('general.name') }}</th>
                   <th>{{ trans('admin/hardware/form.serial') }}</th>
+                   <th>{{ trans('admin/licenses/form.codes') }}</th>
                   <th data-footer-formatter="sumFormatter" data-fieldname="purchase_cost">{{ trans('general.purchase_cost') }}</th>
                   <th>{{ trans('admin/licenses/form.purchase_order') }}</th>
                   <th>{{ trans('general.order_number') }}</th>
@@ -458,6 +459,13 @@
                   <td class="col-md-4">
                     @can('viewKeys', $license)
                     {!! $license->present()->serialUrl() !!}
+                    @else
+                      ------------
+                    @endcan
+                  </td>
+                   <td class="col-md-4">
+                    @can('viewKeys', $license)
+                    {!! $license->present()->assignedSeatCodes() !!}
                     @else
                       ------------
                     @endcan

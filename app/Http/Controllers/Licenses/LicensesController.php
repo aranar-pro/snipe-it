@@ -93,8 +93,8 @@ class LicensesController extends Controller
         $license->purchase_order    = $request->input('purchase_order');
         $license->purchase_order    = $request->input('purchase_order');
         $license->reassignable      = $request->input('reassignable', 0);
-        $license->codes            = $request->input('codes');
-        $license->codes            = $request->input('has_codes', 0);
+        $license->codes             = $request->input('codes');
+        $license->has_codes         = $request->input('has_codes', 0);
         $license->seats             = $request->input('seats');
         $license->serial            = $request->input('serial');
         $license->supplier_id       = $request->input('supplier_id');

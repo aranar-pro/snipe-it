@@ -148,17 +148,21 @@ class License extends Depreciable
      */
     public static function adjustSeatCount($license, $oldSeats, $newSeats)
     {
-
-        Log::info('hello');
-        //this isn't coming from form, it's coming from DB so use the DB license->codes and split that to array.
-        //it's not sufficient to add without reordering because you can do both (this is currently the case without return true)
-
         $license->load('licenseseats.user');
 
-        //regardless if number of seats change, fix the order of the codes
-        //this isn't the new order this is what's in the db
+        //create array of license seats that have been checked out to users
+        $checked_out = $license->licenseseats->filter(function ($seat) {
+            return $seat->assigned_to != null;
+        });
 
+        //this is codes in licenses saved from form
         $seatCodes = $license->getSeatCodes($license->codes);
+
+        //create array of license seats that have been checked out to users
+        //old seat code value
+        $checked_out = $license->licenseseats->filter(function ($seat) {
+            return $seat->assigned_to != null;
+        });
 
         // On Create, we just make one for each of the seats.
         //First we add
@@ -226,43 +230,32 @@ class License extends Depreciable
            
         }
 
-        //create array of licenses that have been checked out to users
-
-        $checked_out_and_modified = $license->licenseseats->filter(function ($seat) {
-            return $seat->assigned_to != null;
-        });
-
-       
-
+     
         //remap and save our license codes whether or not they've been editted.
+        //for each existing seat now in licenseseat table, parse the new codes saved to license table
        foreach ($license->licenseseats as $key => $ls){
             $ls['codes'] = $seatCodes [$key];
+            if (($ls->isDirty()) && ($ls['assigned_to'] != null)){
+                /**
+                 * We're assuming codes are generally interchangable in value and rather than adding complexity with another table
+                 * but we do want to track if a checked out license has been changed
+                 * This needs work, probably not good practice to write the whole code to log and better to link to user
+                 */
+                $from = $ls->getOriginal('codes');
+                $to = $ls->codes;
+                $user = $ls['assigned_to'];
+                $logAction = new Actionlog;
+                $logAction->item_type = License::class;
+                $logAction->item_id = $license->id;
+                $logAction->user_id = Auth::id() ?: 1; // We don't have an id while running the importer from CLI.
+                $logAction->note = "changed ${from} to ${to} for user ${user}";
+                $logAction->target_id = null;
+                $logAction->logaction('update seats');
+                
+            }
             $license->licenseSeatsRelation()->save($ls);
         }
 
-        //ideally we're going to log when seat codes have been changed
-        //can we compare to old array (maybe before and after $License load) and see which has changed?
-        //maybe only log changes that have occured to codes checked out to users?  Probably makes the most sense.
-
-        if (is_array($checked_out_and_modified)){
-            foreach($checked_out_and_modified as $mods) {
-                Log::info($mods);
-            }
-
-        }
-
-        //this is temporary, this should actually reflect if the list has changed (regardless of count) or if assigned license has changed codes
-        if ($change > 0){
-
-            // Log Update of assets.
-            $logAction = new Actionlog;
-            $logAction->item_type = License::class;
-            $logAction->item_id = $license->id;
-            $logAction->user_id = Auth::id() ?: 1; // We don't have an id while running the importer from CLI.
-            $logAction->note = "updated ${change} seats";
-            $logAction->target_id =  null;
-            $logAction->logaction('update seats');
-        }
         return true;
     }
 
