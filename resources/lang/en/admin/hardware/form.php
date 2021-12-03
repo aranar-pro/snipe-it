@@ -12,6 +12,7 @@ return array(
     'checkin_date'		=> 'Checkin Date',
     'checkout_to'		=> 'Checkout to',
     'cost'				=> 'Purchase Cost',
+    'codes'      => 'Seat Code',
     'create'			=> 'Create Asset',
     'date'				=> 'Purchase Date',
     'depreciation'	    => 'Depreciation',

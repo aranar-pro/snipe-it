@@ -48,6 +48,21 @@
                 </div>
             </div>
 
+             <!-- Seat Codes -->
+             @if ($licenseSeat->codes)
+            <div class="form-group">
+                <label class="col-sm-2 control-label">{{ trans('admin/hardware/form.codes') }}</label>
+                <div class="col-md-6">
+                    <p class="form-control-static">
+                        @can('viewKeys', $licenseSeat->license)
+                            {{ $licenseSeat->codes }}
+                        @else
+                            ------------
+                        @endcan
+                        </p>
+                </div>
+            </div>
+            @endif
             <!-- Note -->
             <div class="form-group {{ $errors->has('note') ? 'error' : '' }}">
                 <label for="note" class="col-md-2 control-label">{{ trans('admin/hardware/form.notes') }}</label>
