@@ -47,6 +47,26 @@
                         </div>
                     </div>
 
+                     <!-- Seat Code -->
+                    @php($seatCode = $license->LicenseSeatCodesById(request()->route('seatId')))
+
+                     @if ($seatCode)
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">{{ trans('admin/hardware/form.codes') }}</label>
+                        <div class="col-md-9">
+                            <p class="form-control-static" style="word-wrap: break-word;">
+                                
+                                    @can('viewKeys', $license)
+                                        {{ $seatCode}}
+                                    @else
+                                        ------------
+                                    @endcan
+                                    
+                            </p>
+                        </div>
+                    </div>
+                    @endif
+
                     @include ('partials.forms.checkout-selector', ['user_select' => 'true','asset_select' => 'true', 'location_select' => 'false'])
 
                     @include ('partials.forms.edit.user-select', ['translated_name' => trans('general.user'), 'fieldname' => 'assigned_to', 'required'=>'true'])

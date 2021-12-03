@@ -178,7 +178,7 @@ class License extends Depreciable
                     //fill our model
                     $licenseSeat = new LicenseSeat([
                         'user_id' => Auth::id(),
-                        'codes' =>  $seatCodes[$i],
+                        'codes' =>  $seatCodes[$i] ?? null,
                     ]);
                     //add seats with codes
                     $license->licenseSeatsRelation()->save($licenseSeat);
@@ -234,7 +234,7 @@ class License extends Depreciable
         //remap and save our license codes whether or not they've been editted.
         //for each existing seat now in licenseseat table, parse the new codes saved to license table
        foreach ($license->licenseseats as $key => $ls){
-            $ls['codes'] = $seatCodes [$key];
+            $ls['codes'] = $seatCodes [$key] ?? null;
             if (($ls->isDirty()) && ($ls['assigned_to'] != null)){
                 /**
                  * We're assuming codes are generally interchangable in value and rather than adding complexity with another table
@@ -470,6 +470,22 @@ class License extends Depreciable
                    ->count();
     }
 
+    /**
+     * Get Seat Code
+ 
+     * @author A. Roth
+     * @since [v6.0]
+     * @return string JSON for seat license
+     */
+    public static function LicenseSeatCodesById($seatId)
+    {
+        $lseat = LicenseSeat::where('id', '=', $seatId)->first() ?? null;
+        if ($lseat) {
+            return $lseat->codes;
+        } else {
+            return null;
+        }
+    }
 
     /**
      * Return the number of seats for this asset
