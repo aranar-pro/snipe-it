@@ -234,6 +234,7 @@ class License extends Depreciable
         //remap and save our license codes whether or not they've been editted.
         //for each existing seat now in licenseseat table, parse the new codes saved to license table
        foreach ($license->licenseseats as $key => $ls){
+            
             $ls['codes'] = $seatCodes [$key] ?? null;
             if (($ls->isDirty()) && ($ls['assigned_to'] != null)){
                 /**
@@ -241,15 +242,21 @@ class License extends Depreciable
                  * but we do want to track if a checked out license has been changed
                  * This needs work, probably not good practice to write the whole code to log and better to link to user
                  */
-                $from = $ls->getOriginal('codes');
-                $to = $ls->codes;
+                
+               // $from = $ls->getOriginal('codes');
+               // $to = $ls->codes;
+                $from = 1 + (array_search($ls->getOriginal('codes'), $seatCodes));
+                $to = 1 + (array_search($ls->codes, $seatCodes));
+
                 $user = $ls['assigned_to'];
+               
                 $logAction = new Actionlog;
                 $logAction->item_type = License::class;
                 $logAction->item_id = $license->id;
                 $logAction->user_id = Auth::id() ?: 1; // We don't have an id while running the importer from CLI.
-                $logAction->note = "changed ${from} to ${to} for user ${user}";
+                $logAction->note = "changed seat code ${from} to ${to} for user ${user}";
                 $logAction->target_id = null;
+                //$logAction->log_meta = json_encode($changed);
                 $logAction->logaction('update seats');
                 
             }
