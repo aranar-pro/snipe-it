@@ -240,7 +240,6 @@ class License extends Depreciable
                 /**
                  * We're assuming codes are generally interchangable in value and rather than adding complexity with another table
                  * but we do want to track if a checked out license has been changed
-                 * This needs work, probably not good practice to write the whole code to log and better to link to user
                  */
                 
                // $from = $ls->getOriginal('codes');
