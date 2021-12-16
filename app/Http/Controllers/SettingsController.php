@@ -702,40 +702,6 @@ class SettingsController extends Controller
         return redirect()->back()->withInput()->withErrors($setting->getErrors());
     }
 
-    /**
-     * Return a form to allow a super admin to update settings.
-     *
-     * @author [A. Gianotto] [<snipe@snipe.net>]
-     *
-     * @since [v1.0]
-     *
-     * @return View
-     */
-    public function postMSTeams(Request $request)
-    {
-        if (is_null($setting = Setting::getSettings())) {
-            return redirect()->to('admin')->with('error', trans('admin/settings/message.update.error'));
-        }
-
-        $validatedData = $request->validate([
-            'msteams_endpoint'   => 'url|nullable',
-        ]);
-
-
-        if ($validatedData) {
-
-            $setting->msteams_endpoint = $request->input('msteams_endpoint');
-
-        }
-
-        if ($setting->save()) {
-            return redirect()->route('settings.index')
-            ->with('success', trans('admin/settings/message.update.success'));
-        }
-
-        return redirect()->back()->withInput()->withErrors($setting->getErrors());
-    }
-
 
     /**
      * Return a form to allow a super admin to update settings.
