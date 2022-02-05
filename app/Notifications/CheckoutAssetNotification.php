@@ -16,6 +16,8 @@ use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
 //use NotificationChannels\Discord\DiscordMessage;
 use NotificationChannels\Webhook\WebhookChannel;
 use NotificationChannels\Webhook\WebhookMessage;
+use SnoerenDevelopment\DiscordWebhook\DiscordMessage;
+use SnoerenDevelopment\DiscordWebhook\DiscordWebhookChannel;
 
 
 class CheckoutAssetNotification extends Notification
@@ -60,7 +62,7 @@ class CheckoutAssetNotification extends Notification
      */
     public function via()
     {
-        //0= slack, 1=mail, 2=teams, 3=discord
+        //0= slack, 1=mail, 2=teams, 3=webhook 4=discordwebhook 5=discordbot
         $notifyBy = [];
 
         if ((Setting::getSettings()) && (Setting::getSettings()->slack_endpoint != '')) {
@@ -72,10 +74,16 @@ class CheckoutAssetNotification extends Notification
             \Log::debug('use msteams');
             $notifyBy[2] = MicrosoftTeamsChannel::class;
         }
-        if (Setting::getSettings()->discord_endpoint != '') {
+        /* if (Setting::getSettings()->discord_endpoint != '') {
             \Log::debug('use discord');
             $notifyBy[3] = WebhookChannel::class;
         }
+        */
+        if (Setting::getSettings()->discord_endpoint != '') {
+            \Log::debug('use discord');
+            $notifyBy[4] = DiscordWebhookChannel::class;
+        }
+
 
         /**
          * Only send notifications to users that have email addresses
@@ -160,26 +168,44 @@ class CheckoutAssetNotification extends Notification
             ->button('View in Browser', ''.$target->present()->viewUrl().'', $params = ['section' => 'action_msteams']);
     }
 
+      /**
+     * Get the Discord representation of the notification.
+     *
+     * @param  mixed $notifiable The notifiable model.
+     * @return \SnoerenDevelopment\DiscordWebhook\DiscordMessage
+     */
+
+    public function toDiscord($notifiable)
+    {
+        $expectedCheckin = 'None';
+            $target = $this->target;
+            $admin = $this->admin;
+            $item = $this->item;
+            $note = $this->note;
+            
+        return DiscordMessage::create()
+       ->content("`*this* <br> is a _*test*_.`\n*this* \n is a _*test*_. [hyperlink](".$target->present()->viewUrl().") <--url");
+    }
+
     public function toWebhook($notifiable)
     {
         return WebhookMessage::create()
         ->data([
             
                 'content' => 'Asset Checkout',
-                'embeds' => array(
+                /*'embeds' => array(
                     'title' => 'Testing',
-                    /*'url' => 'https://localhost:443',
+                    'url' => 'https://localhost:443',
                     'fields' => array(
                         'name' => 'checkoutdate',
                         'value' => '1/2/2023',
                         'inline' => true
-                    )*/
-                )
+                    )
+                )*/
             
         ])
         ->header('Content-Type', 'application/json');
     }
-
 
 
 //<a href='.$item->present()->viewUrl().'>'.$item->present()->name).'</a>
