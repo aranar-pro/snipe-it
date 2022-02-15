@@ -94,6 +94,14 @@ class AssetsController extends Controller
         return $view;
     }
 
+/***
+ * Testing laravel excel exporter
+ */
+
+public function export() {
+    return Excel::download(new AssetExport, 'assets.xlsx');
+}
+
     /**
      * Validate and process new asset form data.
      *

@@ -85,7 +85,7 @@
                     </div>
                    
               @endif
-
+<a type="button" href="/hardware/index" download="file.xlsx"><button @click="export()" class="btn btn-primary">Export</button></a>
               <table
                 data-advanced-search="true"
                 data-click-to-select="true"

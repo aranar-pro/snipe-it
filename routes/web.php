@@ -248,6 +248,9 @@ Route::group(['prefix' => 'account', 'middleware' => ['auth']], function () {
 
     Route::get('requested', [ViewAssetsController::class, 'getRequestedAssets'])->name('account.requested');
 
+    //export assets
+    Route::get('hardware/index', [AssetsController::class, 'assetExport'])->name('asset-export');
+
     // Accept Asset
     Route::get(
         'accept-asset/{logID}',
